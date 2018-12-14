@@ -17,10 +17,10 @@
       "name": "res"
     },
     {
-      "type": "signalR",
-      "name": "signalRMessage",
+      "type": "signalRConnectionInfo",
+      "name": "connectionInfo",
       "hubName": "burke",
-      "direction": "out"
+      "direction": "in"
     }
   ]
 }
