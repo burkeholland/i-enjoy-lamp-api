@@ -1,24 +1,23 @@
 const axios = require('axios');
-const LIFX = require('lifx-http-api');
 
-let client = process.env.LIFX_TOKEN && new LIFX({
-  bearerToken: process.env.LIFX_TOKEN
-});
+const config = {
+  headers: {
+    Authorization: `Bearer ${process.env.LIFX_TOKEN}`
+  }
+}
 
 module.exports = async function (context, req) {
-    let color = req.query.color;
+  let color = req.query.color;
+  let userName = req.query.userName;
     if (color) {
       try {
-        if (client) {
-          let result = await client.setState('all', { color, brightness: 1.0 });
-
-          context.res = {
-            body: result
-          };
-        }
+        const res = await axios.put('https://api.lifx.com/v1/lights/all/state', { color: color }, config)
+        context.res = {
+          body: res.data.json
+        };
         context.bindings.signalRMessage = {
           target: 'colorChanged',
-          arguments: [ color ]
+          arguments: [ color, userName ]
         };
       }
       catch (err) {
